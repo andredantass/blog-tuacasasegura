@@ -1,6 +1,14 @@
 {
 	"compatibility_date": "2026-05-18",
-	"compatibility_flags": ["global_fetch_strictly_public"],
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"kv_namespaces": [
+		{
+			"binding": "SESSION",
+			"id": "fbb3c5e43860478285e72c32c8391aec"
+		}
+	],
 	"name": "tuacasablindada",
 	"main": "@astrojs/cloudflare/entrypoints/server",
 	"assets": {
