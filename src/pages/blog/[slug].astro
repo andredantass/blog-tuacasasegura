@@ -1,0 +1,21 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import directus from "../../lib/directus";
+import { readItems, readItem } from "@directus/sdk";
+
+export async function getStaticPaths() {
+  const posts = await directus.request(readItems("posts", {
+    fields: ['*', { relation: ['*'] }],
+  }));
+  return posts.map((post) => ({ params: { slug: post.slug }, props: post }));
+}
+const post = Astro.props;
+---
+
+<Layout title={post.title}>
+  <main>
+    <img src={`https://directus.tuacasasegura.com.br/assets/${post.image}?width=500`} />
+    <h1>{post.title}</h1>
+    <div set:html={post.content} />
+  </main>
+</Layout>
