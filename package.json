@@ -16,7 +16,12 @@
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^13.5.2",
-		"astro": "^6.3.5"
+		"@directus/sdk": "^21.3.0",
+		"@tailwindcss/typography": "^0.5.19",
+		"@tailwindcss/vite": "^4.3.0",
+		"astro": "^6.3.5",
+		"tailwind": "^4.0.0",
+		"tailwindcss": "^4.3.0"
 	},
 	"devDependencies": {
 		"wrangler": "^4.92.0"
