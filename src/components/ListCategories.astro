@@ -1,0 +1,30 @@
+---
+import directus from '@/lib/directus'
+import { readItems } from '@directus/sdk'
+import Category from '@/components/Category.astro'
+
+const { activeCategory } = Astro.props
+
+let categories: { id: number; nome: string; slug: string }[] = []
+try {
+  categories = await directus.request(
+    readItems('categorias', {
+      fields: ['id', 'nome', 'slug'],
+      sort: ['nome'],
+    })
+  )
+} catch (e) {
+  // categorias sem permissão pública no Directus
+}
+---
+
+<div class='relative flex flex-wrap min-w-full gap-5'>
+  <Category />
+  {
+    categories.map((category) => (
+      <Category name={category.nome} slug={category.slug} activeCategory={activeCategory} />
+    ))
+  }
+
+  <div class='hidden sm:block absolute w-full bottom-0 border-b border-gray-200 dark:border-gray-700 -z-40'></div>
+</div>

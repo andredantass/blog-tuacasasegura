@@ -1,0 +1,18 @@
+---
+import { cn } from '@/utils/cn'
+
+const { name = 'Ver Todos', slug, activeCategory } = Astro.props
+
+const isActive = activeCategory === slug && name !== 'Ver Todos'
+---
+
+<a
+  href={name === 'Ver Todos' ? '/' : `/categoria/${slug}`}
+  data-astro-prefetch="false"
+  class={cn(
+    `text-gray-500 dark:text-gray-400 pb-3 first-letter:uppercase font-medium hover:text-gray-800 dark:hover:text-gray-100 border-b-[3px] border-transparent hover:border-black dark:hover:border-white transition-colors duration-150 ease-linear`,
+    isActive && `border-black dark:border-white text-black dark:text-white z-10`
+  )}
+>
+  {name}
+</a>

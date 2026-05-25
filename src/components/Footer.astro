@@ -1,0 +1,125 @@
+---
+import { siteConfig } from '@/data/site.config'
+import FacebookIcon from '@/components/icons/FacebookIcon.astro'
+import InstagramIcon from '@/components/icons/InstagramIcon.astro'
+import WhatsAppIcon from '@/components/icons/WhatsAppIcon.astro'
+import EmailIcon from '@/components/icons/EmailIcon.astro'
+import directus from '@/lib/directus'
+import { readItems } from '@directus/sdk'
+
+const today = new Date()
+
+let pages: { title: string; slug: string }[] = []
+let categories: { id: number; nome: string; slug: string }[] = []
+
+try {
+  [pages, categories] = await Promise.all([
+    directus.request(readItems('pages')),
+    directus.request(
+      readItems('categorias', {
+        fields: ['id', 'nome', 'slug'],
+        sort: ['nome'],
+      })
+    ),
+  ])
+} catch (e) {}
+
+const contactLinks = [
+  {
+    name: 'Facebook',
+    href: 'https://facebook.com/tuacasablindada',
+    icon: FacebookIcon,
+  },
+  {
+    name: 'Instagram',
+    href: 'https://instagram.com/tuacasablindada',
+    icon: InstagramIcon,
+  },
+  {
+    name: 'WhatsApp',
+    href: 'https://wa.me/5500000000000',
+    icon: WhatsAppIcon,
+  },
+  {
+    name: 'E-mail',
+    href: 'mailto:contato@tuacasablindada.com.br',
+    icon: EmailIcon,
+  },
+]
+---
+
+<footer class='w-full bg-stone-900 dark:bg-[#06050d] text-stone-300 mt-16'>
+  <div class='max-w-6xl mx-auto px-5 sm:px-8 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10'>
+
+    <!-- Seção 1: Marca -->
+    <div class='flex flex-col gap-4'>
+      <a href='/' class='flex items-center gap-2'>
+        <img src='/favicon.svg' alt={siteConfig.title} class='w-10 h-10' />
+        <span class='text-white font-bold text-lg leading-tight'>{siteConfig.title}</span>
+      </a>
+      <p class='text-sm text-stone-400 leading-relaxed'>
+        {siteConfig.description}
+      </p>
+    </div>
+
+    <!-- Seção 2: Institucional (páginas) -->
+    <div class='flex flex-col gap-4'>
+      <h3 class='footer-section-title font-semibold text-sm uppercase tracking-widest'>Institucional</h3>
+      <nav class='flex flex-col gap-2'>
+        <a href='/' class='text-sm text-stone-400 hover:text-white transition-colors'>Início</a>
+        {pages.map((page) => (
+          <a
+            href={`/${page.slug}`}
+            class='text-sm text-stone-400 hover:text-white transition-colors first-letter:uppercase'
+          >
+            {page.title}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <!-- Seção 3: Categorias -->
+    <div class='flex flex-col gap-4'>
+      <h3 class='footer-section-title font-semibold text-sm uppercase tracking-widest'>Categorias</h3>
+      <nav class='flex flex-col gap-2'>
+        {categories.length > 0 ? categories.map((cat) => (
+          <a
+            href={`/categoria/${cat.slug}`}
+            class='text-sm text-stone-400 hover:text-white transition-colors first-letter:uppercase'
+          >
+            {cat.nome}
+          </a>
+        )) : (
+          <span class='text-sm text-stone-500'>Em breve</span>
+        )}
+      </nav>
+    </div>
+
+    <!-- Seção 4: Contato -->
+    <div class='flex flex-col gap-4'>
+      <h3 class='footer-section-title font-semibold text-sm uppercase tracking-widest'>Entre em contato</h3>
+      <nav class='flex flex-col gap-3'>
+        {contactLinks.map((link) => (
+          <a
+            href={link.href}
+            target='_blank'
+            rel='noopener noreferrer'
+            class='flex items-center gap-3 text-sm text-stone-400 hover:text-white transition-colors'
+            aria-label={link.name}
+          >
+            <span class='text-stone-300'><link.icon /></span>
+            {link.name}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+  </div>
+
+  <!-- Barra inferior -->
+  <div class='border-t border-stone-700 dark:border-stone-800'>
+    <p class='max-w-6xl mx-auto px-5 sm:px-8 py-4 text-xs text-stone-500 text-center'>
+      &copy; {today.getFullYear()} {siteConfig.author}. Todos os direitos reservados.
+    </p>
+  </div>
+</footer>

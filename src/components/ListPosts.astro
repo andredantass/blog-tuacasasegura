@@ -1,0 +1,38 @@
+---
+import PostCard from '@/components/PostCard.astro'
+import { cn } from '@/utils/cn'
+
+type DirectusPost = {
+  title: string
+  slug: string
+  published_date: string
+  image: string | null
+  author?: { name: string }
+}
+
+type Props = {
+  posts: DirectusPost[]
+  FirstBig?: boolean
+}
+
+const { posts, FirstBig = false } = Astro.props
+---
+
+<section
+  class={cn(
+    `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-3`,
+    FirstBig && `md:[&>*:first-child]:col-span-2`
+  )}
+>
+  {
+    posts.map((post) => (
+      <PostCard
+        title={post.title}
+        slug={post.slug}
+        published_date={post.published_date}
+        image={post.image}
+        author={post.author}
+      />
+    ))
+  }
+</section>
