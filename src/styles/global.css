@@ -1,2 +1,96 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-white: #f8f9fa;
+  --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  --grid-template-columns-list: repeat(auto-fill, minmax(400px, max-content));
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-ExtraLight.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-Light.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-Regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-Medium.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-SemiBold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-Bold.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/Manrope-ExtraBold.woff2') format('woff2');
+}
+
+@layer base {
+  .prose code {
+    @apply text-base;
+  }
+
+  .prose h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-zinc-800! dark:text-zinc-100!;
+  }
+
+  html.dark .shiki,
+  html.dark .shiki span {
+    color: var(--shiki-dark) !important;
+    background-color: theme(--color-gray-900) !important;
+  }
+}
+
+.footer-section-title {
+  color: #ffffff !important;
+}
+
+.glass {
+  background: rgba(57, 56, 56, 0.52);
+  backdrop-filter: blur(13px) saturate(150%);
+  -webkit-backdrop-filter: blur(13px) saturate(150%);
+  z-index: -1;
+}
+
+.shadow {
+  box-shadow: -5px 3px 8px 1px rgba(0, 0, 0, 0.12);
+}

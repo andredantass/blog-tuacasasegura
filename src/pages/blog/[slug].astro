@@ -1,21 +1,59 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import directus from "../../lib/directus";
-import { readItems, readItem } from "@directus/sdk";
+import BlogPost from '@/layouts/BlogPost.astro'
+import Share from '@/components/Share.astro'
+import ListRelatedPosts from '@/components/ListRelatedPosts.astro'
+import directus from '@/lib/directus'
+import { readItems } from '@directus/sdk'
 
-export async function getStaticPaths() {
-  const posts = await directus.request(readItems("posts", {
-    fields: ['*', { relation: ['*'] }],
-  }));
-  return posts.map((post) => ({ params: { slug: post.slug }, props: post }));
-}
-const post = Astro.props;
+export const prerender = false
+
+const { slug } = Astro.params
+
+if (!slug) return Astro.redirect('/blog')
+
+const posts = await directus.request(
+  readItems('posts', {
+    filter: { slug: { _eq: slug } },
+    fields: ['*', { author: ['name'] }] as unknown as ['*'],
+    limit: 1,
+  })
+)
+
+const post = posts[0]
+
+if (!post) return Astro.redirect('/blog')
+
+const relatedPosts = await directus.request(
+  readItems('posts', {
+    fields: ['slug', 'title', 'image'] as ['*'],
+    filter: { slug: { _neq: slug } },
+    sort: ['-published_date'],
+    limit: 3,
+  })
+)
 ---
 
-<Layout title={post.title}>
-  <main>
-    <img src={`https://directus.tuacasasegura.com.br/assets/${post.image}?width=500`} />
-    <h1>{post.title}</h1>
-    <div set:html={post.content} />
-  </main>
-</Layout>
+<BlogPost
+  title={post.title}
+  published_date={post.published_date}
+  image={post.image}
+  author={post.author as { name: string }}
+>
+  <div class='grid grid-cols-1 md:grid-cols-[20%_auto] gap-10 mt-8'>
+    <!-- aside -->
+    <aside class='md:flex flex-col gap-8 hidden'>
+      <Share />
+    </aside>
+
+    <!-- post -->
+    <article class='max-w-full w-full'>
+      <div class='prose prose-lg md:prose-xl dark:prose-invert mb-12 min-w-full' set:html={post.content} />
+
+      <!-- posts relacionados -->
+      <footer>
+        <h2 class='font-bold text-lg dark:text-white mb-6'>Posts Relacionados</h2>
+        <ListRelatedPosts posts={relatedPosts} />
+      </footer>
+    </article>
+  </div>
+</BlogPost>

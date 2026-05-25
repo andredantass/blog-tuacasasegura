@@ -1,6 +1,6 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import directus from "../lib/directus";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import directus from "@/lib/directus";
 import { readItems } from "@directus/sdk";
 
 export async function getStaticPaths() {
@@ -13,7 +13,16 @@ export async function getStaticPaths() {
 const page = Astro.props;
 ---
 
-<Layout title={page.title}>
-    <h1>{page.title}</h1>
-    <div set:html={page.content} />
-</Layout>
+<BaseLayout title={page.title}>
+  <article class='min-w-full md:py-4 sm:max-w-none md:max-w-none'>
+    <header class='mb-3 flex flex-col justify-center items-center gap-6'>
+      <h1 class='text-center text-4xl md:text-6xl md:pb-2.5 font-semibold'>
+        {page.title}
+      </h1>
+    </header>
+    <hr />
+    <div class='prose prose-lg md:prose-xl dark:prose-invert min-w-full'>
+      <div set:html={page.content} />
+    </div>
+  </article>
+</BaseLayout>

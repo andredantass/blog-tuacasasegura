@@ -1,0 +1,162 @@
+---
+import HeaderLink from '@/components/HeaderLink.astro'
+import MenuIcon from './icons/MenuIcon.astro'
+import ToggleTheme from './ToggleTheme.astro'
+import { SOCIALNETWORKS } from '@/data/links'
+import directus from '@/lib/directus'
+import { readItems } from '@directus/sdk'
+
+const pages = await directus.request(readItems('pages'))
+
+let categories: { id: number; nome: string; slug: string }[] = []
+try {
+  categories = await directus.request(
+    readItems('categorias', {
+      fields: ['id', 'nome', 'slug'],
+      sort: ['nome'],
+    })
+  )
+} catch (e) {}
+---
+
+<header class='relative flex items-center h-12 font-semibold'>
+  <a class='text-lg shrink-0 mr-auto' href='/'>Início</a>
+
+  <!-- Desktop nav -->
+  <nav class='hidden md:flex items-center gap-2'>
+    <div class='flex items-center gap-x-3 border-r-2 border-black dark:border-white pr-3'>
+      {pages.map((page) => (
+        <HeaderLink href={`/${page.slug}`} class='flex items-center gap-1 text-sm'>
+          {page.title}
+        </HeaderLink>
+      ))}
+    </div>
+    <div class='flex items-center gap-2'>
+      {SOCIALNETWORKS.map((network) => (
+        <HeaderLink href={network.url} target='_blank' aria-label={network.name}>
+          <span>{<network.icon />}</span>
+        </HeaderLink>
+      ))}
+    </div>
+  </nav>
+
+  <!-- Desktop theme toggle -->
+  <div class='flex items-center gap-3 md:pl-3' transition:persist='navbar'>
+    <ToggleTheme />
+
+    <!-- Mobile menu button -->
+    <button
+      id='astro-header-drawer-button'
+      type='button'
+      class='md:hidden'
+      aria-label='Abrir Menu'
+      aria-expanded='false'
+    >
+      <MenuIcon />
+      <span class='sr-only'>Mostrar Menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile drawer overlay -->
+<div
+  id='astro-header-overlay'
+  class='fixed inset-0 bg-black/40 z-40 hidden md:hidden'
+  aria-hidden='true'
+></div>
+
+<!-- Mobile drawer -->
+<div
+  id='astro-header-drawer'
+  class='fixed top-0 right-0 h-full w-72 max-w-[85vw] bg-white dark:bg-[#0a0910] shadow-xl z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out md:hidden'
+>
+  <!-- Drawer header -->
+  <div class='flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-700'>
+    <span class='font-semibold text-base'>Menu</span>
+    <button id='astro-header-close-button' type='button' aria-label='Fechar Menu'>
+      <svg xmlns='http://www.w3.org/2000/svg' class='w-6 h-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12' />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Drawer body -->
+  <div class='flex flex-col gap-6 px-5 py-6 overflow-y-auto flex-1'>
+    <!-- Pages links -->
+    <nav class='flex flex-col gap-4'>
+      {pages.map((page) => (
+        <HeaderLink href={`/${page.slug}`} class='text-base font-medium'>
+          {page.title}
+        </HeaderLink>
+      ))}
+    </nav>
+
+    <!-- Divider -->
+    <hr class='border-gray-200 dark:border-gray-700' />
+
+    <!-- Categories -->
+    <div>
+      <p class='text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3'>Categorias</p>
+      <div class='flex flex-col gap-3'>
+        <a href='/' class='text-base font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white'>
+          Ver Todos
+        </a>
+        {categories.map((category) => (
+          <a
+            href={`/categoria/${category.slug}`}
+            class='text-base font-medium text-gray-600 dark:text-gray-300 hover:text-black dark:hover:text-white first-letter:uppercase'
+          >
+            {category.nome}
+          </a>
+        ))}
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class='border-gray-200 dark:border-gray-700' />
+
+    <!-- Social networks -->
+    <div class='flex items-center gap-4'>
+      {SOCIALNETWORKS.map((network) => (
+        <HeaderLink href={network.url} target='_blank' aria-label={network.name}>
+          <span>{<network.icon />}</span>
+        </HeaderLink>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  function initMenu() {
+    const drawer = document.getElementById('astro-header-drawer')
+    const overlay = document.getElementById('astro-header-overlay')
+    const openBtn = document.getElementById('astro-header-drawer-button')
+    const closeBtn = document.getElementById('astro-header-close-button')
+
+    function openMenu() {
+      drawer?.classList.remove('translate-x-full')
+      overlay?.classList.remove('hidden')
+      openBtn?.setAttribute('aria-expanded', 'true')
+      document.body.style.overflow = 'hidden'
+    }
+
+    function closeMenu() {
+      drawer?.classList.add('translate-x-full')
+      overlay?.classList.add('hidden')
+      openBtn?.setAttribute('aria-expanded', 'false')
+      document.body.style.overflow = ''
+    }
+
+    openBtn?.addEventListener('click', openMenu)
+    closeBtn?.addEventListener('click', closeMenu)
+    overlay?.addEventListener('click', closeMenu)
+
+    // Close on drawer link click
+    drawer?.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', closeMenu)
+    })
+  }
+
+  initMenu()
+  document.addEventListener('astro:after-swap', initMenu)
+</script>

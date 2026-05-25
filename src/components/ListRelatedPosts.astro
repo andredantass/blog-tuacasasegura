@@ -1,0 +1,52 @@
+---
+const DIRECTUS_URL = 'https://directus.tuacasasegura.com.br'
+
+type DirectusPost = {
+  title: string
+  slug: string
+  image: string | null
+}
+
+type Props = {
+  posts: DirectusPost[]
+}
+
+const { posts } = Astro.props
+---
+
+<section class='flex flex-col md:flex-row sm:justify-between gap-8'>
+  {
+    posts.length > 0 ? (
+      posts.map((post) => {
+        const imageUrl = post.image
+          ? `${DIRECTUS_URL}/assets/${post.image}?width=200&height=200&fit=cover`
+          : null
+        return (
+          <div class='flex flex-wrap gap-2'>
+            <div class='min-h-full'>
+              {imageUrl ? (
+                <img
+                  src={imageUrl}
+                  width={64}
+                  height={64}
+                  class='w-16 h-16 object-cover rounded-full'
+                  alt={`Imagem de ${post.title}`}
+                  loading='lazy'
+                />
+              ) : (
+                <div class='w-16 h-16 rounded-full bg-indigo-900' />
+              )}
+            </div>
+            <header class='flex justify-center items-center'>
+              <a class='font-medium hover:underline' href={`/blog/${post.slug}/`}>
+                {post.title}
+              </a>
+            </header>
+          </div>
+        )
+      })
+    ) : (
+      <span class='text-gray-500'>Ainda não há posts relacionados.</span>
+    )
+  }
+</section>

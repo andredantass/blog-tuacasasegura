@@ -1,0 +1,44 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+import TitlePage from '@/components/TitlePage.astro'
+import ListPosts from '@/components/ListPosts.astro'
+import ListCategories from '@/components/ListCategories.astro'
+import directus from '@/lib/directus'
+import { readItems } from '@directus/sdk'
+
+export const prerender = false
+
+const { slug } = Astro.params
+
+if (!slug) return Astro.redirect('/')
+
+const categorias = await directus.request(
+  readItems('categorias', {
+    filter: { slug: { _eq: slug } },
+    fields: ['id', 'nome', 'slug'],
+    limit: 1,
+  })
+)
+
+const categoria = categorias[0]
+
+if (!categoria) return Astro.redirect('/')
+
+const posts = await directus.request(
+  readItems('posts', {
+    fields: ['slug', 'title', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
+    filter: { categoria: { slug: { _eq: slug } } },
+    sort: ['-published_date'],
+  })
+)
+---
+
+<BaseLayout title={`Categoria: ${categoria.nome}`}>
+  <TitlePage title={categoria.nome} />
+  <ListCategories activeCategory={slug} />
+
+  <div>
+    <h2 class='text-lg font-medium tracking-wide text-end'>Posts</h2>
+    <ListPosts posts={posts} />
+  </div>
+</BaseLayout>
