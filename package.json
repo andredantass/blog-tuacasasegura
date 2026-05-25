@@ -20,10 +20,14 @@
 		"@tailwindcss/typography": "^0.5.19",
 		"@tailwindcss/vite": "^4.3.0",
 		"astro": "^6.3.5",
+		"clsx": "^2.1.1",
+		"motion": "^12.40.0",
 		"tailwind": "^4.0.0",
+		"tailwind-merge": "^3.6.0",
 		"tailwindcss": "^4.3.0"
 	},
 	"devDependencies": {
+		"@types/node": "^25.9.1",
 		"wrangler": "^4.92.0"
 	},
 	"overrides": {
