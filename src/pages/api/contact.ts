@@ -1,10 +1,10 @@
 import type { APIRoute } from 'astro'
-import { env as cfEnv } from 'cloudflare:workers'
 
 export const prerender = false
 
-export const POST: APIRoute = async ({ request }) => {
-  const apiKey = (cfEnv as Record<string, string | undefined>)['RESEND_API_KEY'] ?? import.meta.env.RESEND_API_KEY
+export const POST: APIRoute = async ({ request, locals }) => {
+  const runtime = (locals as unknown as Record<string, unknown>).runtime as { env?: Record<string, string> } | undefined
+  const apiKey = runtime?.env?.['RESEND_API_KEY'] ?? import.meta.env.RESEND_API_KEY
 
   if (!apiKey) {
     return new Response(JSON.stringify({ error: 'Serviço de e-mail não configurado.' }), {
