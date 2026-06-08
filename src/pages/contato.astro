@@ -161,19 +161,22 @@ import BaseLayout from '@/layouts/BaseLayout.astro'
         body: JSON.stringify(data),
       })
 
-      const json = await res.json()
-
       if (res.ok) {
         successBox.classList.remove('hidden')
         form.reset()
         successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       } else {
-        errorText.textContent = json.error ?? 'Erro ao enviar mensagem. Tente novamente.'
+        let message = 'Erro ao enviar mensagem. Tente novamente.'
+        try {
+          const json = await res.json()
+          message = json.error ?? message
+        } catch {}
+        errorText.textContent = message
         errorBox.classList.remove('hidden')
         errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
       }
     } catch {
-      errorText.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.'
+      errorText.textContent = `Erro ao enviar (status desconhecido). Tente novamente.`
       errorBox.classList.remove('hidden')
     } finally {
       submitBtn.disabled = false
