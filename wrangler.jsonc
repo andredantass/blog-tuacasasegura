@@ -1,6 +1,7 @@
 {
 	"compatibility_date": "2026-05-18",
 	"compatibility_flags": [
+		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
 	"kv_namespaces": [
@@ -17,5 +18,8 @@
 	},
 	"observability": {
 		"enabled": true
+	},
+	"vars": {
+		"RESEND_API_KEY": ""
 	}
 }
