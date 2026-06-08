@@ -1,0 +1,184 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro'
+---
+
+<BaseLayout
+  title='Contato — Tua Casa Segura'
+  description='Entre em contato com a Tua Casa Segura. Tire suas dúvidas, solicite um orçamento ou envie uma mensagem.'
+>
+  <article class='min-w-full md:py-4 sm:max-w-none md:max-w-none'>
+    <header class='mb-3 flex flex-col justify-center items-center gap-6'>
+      <h1 class='text-center text-4xl md:text-6xl md:pb-2.5 font-semibold'>
+        Fale Conosco
+      </h1>
+      <p class='text-center text-stone-500 dark:text-stone-400 max-w-xl'>
+        Tem alguma dúvida ou quer solicitar um orçamento? Preencha o formulário abaixo e entraremos em contato.
+      </p>
+    </header>
+    <hr />
+
+    <div class='max-w-2xl mx-auto mt-10'>
+      <!-- Feedback messages -->
+      <div id='contact-success' class='hidden mb-6 rounded-lg bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 p-4 text-green-800 dark:text-green-200 text-sm'>
+        ✓ Mensagem enviada com sucesso! Entraremos em contato em breve.
+      </div>
+      <div id='contact-error' class='hidden mb-6 rounded-lg bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 p-4 text-red-800 dark:text-red-200 text-sm'>
+        <span id='contact-error-text'>Erro ao enviar mensagem. Tente novamente.</span>
+      </div>
+
+      <form id='contact-form' novalidate class='flex flex-col gap-6'>
+        <div class='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+          <!-- Nome -->
+          <div class='flex flex-col gap-2'>
+            <label for='name' class='text-sm font-semibold'>
+              Nome <span class='text-red-500'>*</span>
+            </label>
+            <input
+              id='name'
+              name='name'
+              type='text'
+              autocomplete='name'
+              placeholder='Seu nome completo'
+              required
+              class='rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition'
+            />
+          </div>
+
+          <!-- E-mail -->
+          <div class='flex flex-col gap-2'>
+            <label for='email' class='text-sm font-semibold'>
+              E-mail <span class='text-red-500'>*</span>
+            </label>
+            <input
+              id='email'
+              name='email'
+              type='email'
+              autocomplete='email'
+              placeholder='seu@email.com'
+              required
+              class='rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition'
+            />
+          </div>
+        </div>
+
+        <div class='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+          <!-- Telefone -->
+          <div class='flex flex-col gap-2'>
+            <label for='phone' class='text-sm font-semibold'>
+              Telefone <span class='text-stone-400 font-normal'>(opcional)</span>
+            </label>
+            <input
+              id='phone'
+              name='phone'
+              type='tel'
+              autocomplete='tel'
+              placeholder='(00) 00000-0000'
+              class='rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition'
+            />
+          </div>
+
+          <!-- Assunto -->
+          <div class='flex flex-col gap-2'>
+            <label for='subject' class='text-sm font-semibold'>
+              Assunto <span class='text-red-500'>*</span>
+            </label>
+            <input
+              id='subject'
+              name='subject'
+              type='text'
+              placeholder='Como podemos ajudar?'
+              required
+              class='rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition'
+            />
+          </div>
+        </div>
+
+        <!-- Mensagem -->
+        <div class='flex flex-col gap-2'>
+          <label for='message' class='text-sm font-semibold'>
+            Mensagem <span class='text-red-500'>*</span>
+          </label>
+          <textarea
+            id='message'
+            name='message'
+            rows='6'
+            placeholder='Escreva sua mensagem aqui...'
+            required
+            class='rounded-lg border border-stone-300 dark:border-stone-700 bg-white dark:bg-stone-900 px-4 py-3 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 dark:placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition resize-none'
+          ></textarea>
+        </div>
+
+        <!-- Submit -->
+        <div class='flex justify-end'>
+          <button
+            id='contact-submit'
+            type='submit'
+            class='inline-flex items-center gap-2 rounded-lg bg-stone-900 dark:bg-white text-white dark:text-stone-900 px-8 py-3 text-sm font-semibold hover:bg-stone-700 dark:hover:bg-stone-100 focus:outline-none focus:ring-2 focus:ring-stone-500 dark:focus:ring-stone-400 transition disabled:opacity-50 disabled:cursor-not-allowed'
+          >
+            <span id='contact-submit-label'>Enviar mensagem</span>
+            <svg id='contact-spinner' class='hidden animate-spin w-4 h-4' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+              <circle class='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle>
+              <path class='opacity-75' fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z'></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </article>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement
+  const submitBtn = document.getElementById('contact-submit') as HTMLButtonElement
+  const submitLabel = document.getElementById('contact-submit-label') as HTMLSpanElement
+  const spinner = document.getElementById('contact-spinner') as HTMLElement
+  const successBox = document.getElementById('contact-success') as HTMLElement
+  const errorBox = document.getElementById('contact-error') as HTMLElement
+  const errorText = document.getElementById('contact-error-text') as HTMLElement
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    successBox.classList.add('hidden')
+    errorBox.classList.add('hidden')
+
+    submitBtn.disabled = true
+    submitLabel.textContent = 'Enviando...'
+    spinner.classList.remove('hidden')
+
+    const data = {
+      name: (document.getElementById('name') as HTMLInputElement).value.trim(),
+      email: (document.getElementById('email') as HTMLInputElement).value.trim(),
+      phone: (document.getElementById('phone') as HTMLInputElement).value.trim(),
+      subject: (document.getElementById('subject') as HTMLInputElement).value.trim(),
+      message: (document.getElementById('message') as HTMLTextAreaElement).value.trim(),
+    }
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      })
+
+      const json = await res.json()
+
+      if (res.ok) {
+        successBox.classList.remove('hidden')
+        form.reset()
+        successBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      } else {
+        errorText.textContent = json.error ?? 'Erro ao enviar mensagem. Tente novamente.'
+        errorBox.classList.remove('hidden')
+        errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      }
+    } catch {
+      errorText.textContent = 'Erro de conexão. Verifique sua internet e tente novamente.'
+      errorBox.classList.remove('hidden')
+    } finally {
+      submitBtn.disabled = false
+      submitLabel.textContent = 'Enviar mensagem'
+      spinner.classList.add('hidden')
+    }
+  })
+</script>

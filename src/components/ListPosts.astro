@@ -5,6 +5,7 @@ import { cn } from '@/utils/cn'
 type DirectusPost = {
   title: string
   slug: string
+  description?: string | null
   published_date: string
   image: string | null
   author?: { name: string }
@@ -29,6 +30,7 @@ const { posts, FirstBig = false } = Astro.props
       <PostCard
         title={post.title}
         slug={post.slug}
+        description={post.description}
         published_date={post.published_date}
         image={post.image}
         author={post.author}

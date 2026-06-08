@@ -7,7 +7,7 @@ import { readItems } from '@directus/sdk'
 
 const posts = await directus.request(
   readItems('posts', {
-    fields: ['slug', 'title', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
+    fields: ['slug', 'title', 'description', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
     sort: ['-published_date'],
   })
 )

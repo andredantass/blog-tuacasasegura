@@ -7,12 +7,13 @@ const DIRECTUS_URL = 'https://directus.tuacasasegura.com.br'
 type Props = {
   title: string
   slug: string
+  description?: string | null
   published_date: string
   image: string | null
   author?: { name: string }
 }
 
-const { title, slug, published_date, image, author } = Astro.props
+const { title, slug, description, published_date, image, author } = Astro.props
 
 const imageUrl = image
   ? `${DIRECTUS_URL}/assets/${image}?width=600&height=300&fit=cover`
@@ -52,6 +53,9 @@ const imageUrl = image
       <a class='text-2xl font-semibold -tracking-wider' href={`/blog/${slug}/`}>
         {title}
       </a>
+      {description && (
+        <p class='text-sm text-gray-600 dark:text-gray-400 line-clamp-3'>{description}</p>
+      )}
     </div>
 
     <footer class='flex justify-between items-center'>
