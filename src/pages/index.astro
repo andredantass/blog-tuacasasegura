@@ -14,7 +14,6 @@ const [global, posts] = await Promise.all([
   directus.request(
     readItems('posts', {
       fields: ['slug', 'title', 'description', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
-      filter: { status: { _eq: 'published' } },
       sort: ['-published_date'],
       limit: MAX_POSTS,
     })

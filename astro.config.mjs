@@ -17,8 +17,5 @@ export default defineConfig({
         '@': resolve(__dirname, 'src')
       }
     },
-    ssr: {
-      noExternal: ['resend']
-    }
   }
 });
