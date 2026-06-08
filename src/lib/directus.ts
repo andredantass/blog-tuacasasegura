@@ -28,6 +28,7 @@ type Post = {
   content: string;
   published_date: string;
   slug: string;
+  status: string;
   categoria: Category | null;
 }
 

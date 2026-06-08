@@ -26,7 +26,7 @@ if (!post) return Astro.redirect('/blog')
 const relatedPosts = await directus.request(
   readItems('posts', {
     fields: ['slug', 'title', 'image'] as ['*'],
-    filter: { slug: { _neq: slug } },
+    filter: { slug: { _neq: slug }, status: { _eq: 'published' } },
     sort: ['-published_date'],
     limit: 3,
   })
