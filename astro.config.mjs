@@ -16,6 +16,9 @@ export default defineConfig({
       alias: {
         '@': resolve(__dirname, 'src')
       }
+    },
+    ssr: {
+      noExternal: ['resend']
     }
   }
 });
