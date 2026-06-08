@@ -13,7 +13,7 @@ const [global, posts] = await Promise.all([
   directus.request(readSingleton('global')),
   directus.request(
     readItems('posts', {
-      fields: ['slug', 'title', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
+      fields: ['slug', 'title', 'description', 'published_date', 'image', { author: ['name'] }] as unknown as ['*'],
       sort: ['-published_date'],
       limit: MAX_POSTS,
     })
